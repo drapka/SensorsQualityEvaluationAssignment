@@ -11,7 +11,7 @@ public class JsonOutputSerializer : IOutputSerializer
     {
         await using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
 
-        writer.WriteStartArray();
+        writer.WriteStartObject();
 
         await foreach (var result in evaluationResults.WithCancellation(token))
         {
@@ -19,15 +19,14 @@ public class JsonOutputSerializer : IOutputSerializer
             WriteSensorEvaluationResult(writer, result);
         }
 
-        writer.WriteEndArray();
+        writer.WriteEndObject();
         await writer.FlushAsync(token);
     }
 
     private static void WriteSensorEvaluationResult(Utf8JsonWriter writer, SensorEvaluationResult result)
     {
-        writer.WriteStartObject();
-        writer.WriteString(result.SensorName, ToSpaceSeparated(result.Result.ToString()));
-        writer.WriteEndObject();
+        writer.WritePropertyName(result.SensorName);
+        writer.WriteStringValue(ToSpaceSeparated(result.Result.ToString()));
     }
 
     private static string ToSpaceSeparated(string value)

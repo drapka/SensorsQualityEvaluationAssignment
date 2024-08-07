@@ -18,7 +18,7 @@ public class JsonOutputSerializerTests
         await serializer.SerializeEvaluationResult(stream, evaluationResults);
         var jsonResult = Encoding.UTF8.GetString(stream.ToArray());
 
-        const string expectedJson = "[]";
+        const string expectedJson = "{}";
         Assert.AreEqual(expectedJson, jsonResult);
     }
 
@@ -38,14 +38,10 @@ public class JsonOutputSerializerTests
         var jsonResult = Encoding.UTF8.GetString(stream.ToArray());
 
         const string expectedJson = """
-                                    [
-                                      {
-                                        "temp-1": "ultra precise"
-                                      },
-                                      {
-                                        "hum-1": "discard"
-                                      }
-                                    ]
+                                    {
+                                      "temp-1": "ultra precise",
+                                      "hum-1": "discard"
+                                    }
                                     """;
 
         Assert.AreEqual(expectedJson, jsonResult);
